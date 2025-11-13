@@ -1,15 +1,7 @@
-### Build outputs
+### Build outputs (SBT 1.x)
 target/
 */target/
-*/.home
-/.bsp
-.cache
 .history
-.lib/
-dist/
-lib_managed/
-src_managed/
-project/boot/
 project/plugins/project/
 
 ### Generated binaries
@@ -35,8 +27,6 @@ hs_err_pid*
 *.launch
 .vscode/
 .metals/
-.scala_dependencies
-.worksheet
 
 ### OS cruft
 .DS_Store
@@ -52,6 +42,7 @@ test_run_dir/
 **/verilog/**/obj_dir/
 **/verilog/**/*.v
 **/verilog/**/*.fir
+**/verilog/**/*.f
 **/verilog/**/*.anno.json
 **/verilog/**/*.vcd
 **/verilog/**/*.txt
@@ -68,4 +59,3 @@ test_run_dir/
 ### Auto-generated compliance test files (created by RISCOF during test runs)
 **/src/test/scala/riscv/compliance/ComplianceTest.scala
 **/src/main/resources/test.asmbin
-2-mmio-trap/csrc/nyancat-data.h
