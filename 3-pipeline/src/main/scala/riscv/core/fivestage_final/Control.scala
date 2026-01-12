@@ -170,31 +170,39 @@ class Control extends Module {
   // detection logic implemented above
   //
   // Q1: Why do we need to stall for load-use hazards?
-  // A: [Student answer here]
+  // A: The load data is only available in MEM/WB, but the dependent instruction
+  //    needs it earlier (EX or ID). Forwarding cannot supply the value in time,
+  //    so we stall one cycle to wait for the load result.
   // Hint: Consider data dependency and forwarding limitations
   //
   // Q2: What is the difference between "stall" and "flush" operations?
-  // A: [Student answer here]
+  // A: A stall freezes pipeline state (PC/IF/ID) and inserts a bubble so the
+  //    instruction waits for data. A flush discards a wrong-path instruction
+  //    by overwriting a pipeline register with a NOP/default value.
   // Hint: Compare their effects on pipeline registers and PC
   //
   // Q3: Why does jump instruction with register dependency need stall?
-  // A: [Student answer here]
+  // A: JALR needs rs1 to compute the target address in ID. If rs1 is produced
+  //    by a prior load that has not completed, the target is not ready, so a
+  //    stall is required to avoid jumping to a wrong address.
   // Hint: When is jump target address available?
   //
   // Q4: In this design, why is branch penalty only 1 cycle instead of 2?
-  // A: [Student answer here]
+  // A: Branches are resolved in ID with forwarding, so only IF has fetched a
+  //    wrong instruction. We flush IF only, not ID, giving a 1-cycle penalty.
   // Hint: Compare ID-stage vs EX-stage branch resolution
   //
   // Q5: What would happen if we removed the hazard detection logic entirely?
-  // A: [Student answer here]
+  // A: The pipeline would use stale or wrong operands and mis-handle control
+  //    flow, producing incorrect register/memory results and wrong PCs.
   // Hint: Consider data hazards and control flow correctness
   //
   // Q6: Complete the stall condition summary:
   // Stall is needed when:
-  // 1. ? (EX stage condition)
-  // 2. ? (MEM stage condition)
+  // 1. EX stage has a load or jump dependency whose destination matches ID rs1/rs2.
+  // 2. MEM stage has a load and the ID jump depends on that destination.
   //
   // Flush is needed when:
-  // 1. ? (Branch/Jump condition)
+  // 1. A branch/jump is taken in ID, so the IF instruction is on the wrong path.
   //
 }
