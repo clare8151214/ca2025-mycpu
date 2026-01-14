@@ -114,3 +114,36 @@ class ByteAccessTest extends AnyFlatSpec with ChiselScalatestTester {
     }
   }
 }
+
+class HanoiTest extends AnyFlatSpec with ChiselScalatestTester {
+  behavior.of("Single Cycle CPU - Integration Tests")
+  it should "generate correct 3-disk Hanoi move sequence" in {
+    test(new TestTopModule("hanoi.asmbin")).withAnnotations(TestAnnotations.annos) { c =>
+      for (i <- 1 to 200) {
+        c.clock.step(100)
+        c.io.mem_debug_read_address.poke((i * 4).U) // Avoid timeout
+      }
+
+      // move_count at 0x20
+      c.io.mem_debug_read_address.poke(0x20.U)
+      c.clock.step()
+      c.io.mem_debug_read_data.expect(7.U)
+
+      // First move: disk=1, from='A', to='C'
+      c.io.mem_debug_read_address.poke(0x40.U)
+      c.clock.step()
+      c.io.mem_debug_read_data.expect(1.U)
+      c.io.mem_debug_read_address.poke(0x44.U)
+      c.clock.step()
+      c.io.mem_debug_read_data.expect(0x00004341L.U)
+
+      // Last move: disk=1, from='A', to='C'
+      c.io.mem_debug_read_address.poke(0x70.U)
+      c.clock.step()
+      c.io.mem_debug_read_data.expect(1.U)
+      c.io.mem_debug_read_address.poke(0x74.U)
+      c.clock.step()
+      c.io.mem_debug_read_data.expect(0x00004341L.U)
+    }
+  }
+}

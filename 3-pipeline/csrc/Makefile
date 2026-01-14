@@ -24,6 +24,7 @@ OBJCOPY := $(CROSS_COMPILE)objcopy
 BINS = \
 	fibonacci.asmbin \
 	hazard.asmbin \
+	hanoi.asmbin \
 	quicksort.asmbin \
 	sb.asmbin \
 	uart.asmbin \
